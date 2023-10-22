@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:news/models/categoryModel.dart';
+import 'package:news/screens/categories/widgets/categoryWidget.dart';
+
+class CategoryScreen extends StatelessWidget {
+  Function onCategorySelected;
+
+  CategoryScreen(this.onCategorySelected, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List<CategoryModel> categories = [
+      CategoryModel(
+          title: "Business",
+          color: const Color(0XFFCF7E48),
+          image: Image.asset("assets/images/bussines.png")),
+      CategoryModel(
+          title: "Sports",
+          color: const Color(0XFFC91C22),
+          image: Image.asset("assets/images/ball.png")),
+      CategoryModel(
+          title: "Health",
+          color: const Color(0XFFED1E79),
+          image: Image.asset("assets/images/health.png")),
+      CategoryModel(
+          title: "Science",
+          color: const Color(0XFFF2D352),
+          image: Image.asset("assets/images/science.png")),
+      CategoryModel(
+          title: "Technology",
+          color: const Color(0XFF4882CF),
+          image: Image.asset("assets/images/environment.png")),
+      CategoryModel(
+          title: "General",
+          color: const Color(0XFF003E90),
+          image: Image.asset("assets/images/Politics.png")),
+    ];
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 18.0,horizontal: 8 ),
+      child: GridView.builder(
+        itemCount: categories.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
+        itemBuilder: (context, index) {
+          return InkWell(
+              onTap: () {
+                onCategorySelected(categories[index].title.toLowerCase());
+              },
+              child: CategoryWidget(categories[index]));
+        },
+      ),
+    );
+  }
+}

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:news/screens/categories/categoryScreen.dart';
-import 'package:news/screens/settings/settingsScreen.dart';
 import 'package:news/screens/tabs/tabScreen.dart';
 import 'package:news/shard/network/remote/api_manager.dart';
 import 'package:news/shard/style/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeLayout extends StatefulWidget {
   static const String routName = "Home";
@@ -48,21 +48,29 @@ class _HomeLayoutState extends State<HomeLayout> {
                   children: [
                     InkWell(
                       onTap: () {
-                        toCategoryScreen();
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          HomeLayout.routName,
+                          (route) => false,
+                        );
                       },
-                      child: const Row(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Icon(
                             Icons.menu,
+                            color: green,
                             size: 22,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
-                            "Category",
-                            style: TextStyle(fontSize: 22),
+                            AppLocalizations.of(context)!.category,
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: green,
+                            ),
                           )
                         ],
                       ),
@@ -71,24 +79,20 @@ class _HomeLayoutState extends State<HomeLayout> {
                       height: 20,
                     ),
                     InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Settings(toCategoryScreen),
-                        ));
-                      },
-                      child: const Row(
+                      onTap: () => Navigator.pop(context),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.settings,
                             size: 22,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
-                            "Settings",
-                            style: TextStyle(fontSize: 22),
+                            AppLocalizations.of(context)!.settings,
+                            style: TextStyle(fontSize: 22, color: green),
                           )
                         ],
                       ),
@@ -223,7 +227,7 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   toCategoryScreen() {
     categoryTitle = null;
-    inSearch=false;
+    inSearch = false;
     Navigator.pop(context);
     setState(() {});
   }

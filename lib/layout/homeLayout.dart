@@ -25,7 +25,7 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   @override
   Widget build(BuildContext context) {
-    var provider =Provider.of<MyProvider>(context);
+    var provider = Provider.of<MyProvider>(context);
     return Scaffold(
       drawer: Drawer(
         backgroundColor: Colors.white,
@@ -121,7 +121,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                 (categoryId == null)
                     ? "News App".toUpperCase()
                     : categoryTiTle!.toUpperCase(),
-                style: const TextStyle(fontSize: 22)))
+              ))
             : TextFormField(
                 autofocus: true,
                 controller: searchController,
@@ -161,12 +161,6 @@ class _HomeLayoutState extends State<HomeLayout> {
                     hintText: "Search Article",
                     hintStyle: const TextStyle(color: Colors.grey)),
               ),
-        centerTitle: true,
-        backgroundColor: green,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(18),
-                bottomLeft: Radius.circular(18))),
         actions: [
           (!inSearch && categoryId != null)
               ? IconButton(
@@ -231,9 +225,9 @@ class _HomeLayoutState extends State<HomeLayout> {
     );
   }
 
-  onCategorySelected(String? selectedCategoryId,selectedCategoryTitle) {
+  onCategorySelected(String? selectedCategoryId, selectedCategoryTitle) {
     categoryId = selectedCategoryId;
-    categoryTiTle=selectedCategoryTitle;
+    categoryTiTle = selectedCategoryTitle;
     setState(() {});
   }
 

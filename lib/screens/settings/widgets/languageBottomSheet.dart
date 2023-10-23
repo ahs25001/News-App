@@ -5,8 +5,8 @@ class LanguageBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
+    return const Padding(
+      padding: EdgeInsets.all(18.0),
       child: Column(
         children: [
           Row(

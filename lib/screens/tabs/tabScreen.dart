@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news/models/SourceResponse.dart';
 import 'package:news/providers/my_provider.dart';
-import 'package:news/screens/tabs/widgets/newsWidget.dart';
+import 'package:news/screens/tabs/widgets/articaleWidget.dart';
 import 'package:news/screens/tabs/widgets/tabItem.dart';
 import 'package:news/shard/network/remote/api_manager.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class TabScreen extends StatefulWidget {
   String? titleOfSearch;
 
   TabScreen(
-      {required this.sources,
+      {super.key, required this.sources,
       required this.inSearch,
       required this.titleOfSearch});
 

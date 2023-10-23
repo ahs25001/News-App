@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/newsResponse.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DetailScreen extends StatelessWidget {
   static const String routName = "Detail screen";
@@ -21,7 +22,11 @@ class DetailScreen extends StatelessWidget {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(18),
-                child: Image.network(args.urlToImage!)),
+                child:CachedNetworkImage(
+                  imageUrl: args.urlToImage!,
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ) ),
             const SizedBox(
               height: 15,
             ),

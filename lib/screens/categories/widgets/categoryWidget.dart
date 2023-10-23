@@ -11,15 +11,15 @@ class CategoryWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: categoryModel.color,
-          borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(18),
-              topRight: const Radius.circular(18),
-              bottomLeft: const Radius.circular(18),
-              bottomRight: const Radius.circular(18))),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(18),
+              topRight: Radius.circular(18),
+              bottomLeft: Radius.circular(18),
+              bottomRight: Radius.circular(18))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          categoryModel.image,
+          Expanded(child: categoryModel.image),
           Text(categoryModel.title,style: const TextStyle(color: Colors.white,fontSize: 22),)
         ],
       ),

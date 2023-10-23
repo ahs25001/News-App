@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:news/providers/my_provider.dart';
 import 'package:news/screens/categories/categoryScreen.dart';
+import 'package:news/screens/settings/settingsScreen.dart';
 import 'package:news/screens/tabs/tabScreen.dart';
 import 'package:news/shard/network/remote/api_manager.dart';
 import 'package:news/shard/style/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class HomeLayout extends StatefulWidget {
   static const String routName = "Home";
@@ -15,12 +18,14 @@ class HomeLayout extends StatefulWidget {
 }
 
 class _HomeLayoutState extends State<HomeLayout> {
-  String? categoryTitle;
+  String? categoryId;
+  String? categoryTiTle;
   bool inSearch = false;
   TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var provider =Provider.of<MyProvider>(context);
     return Scaffold(
       drawer: Drawer(
         backgroundColor: Colors.white,
@@ -79,7 +84,13 @@ class _HomeLayoutState extends State<HomeLayout> {
                       height: 20,
                     ),
                     InkWell(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return Settings(toCategoryScreen);
+                          },
+                        ));
+                      },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -92,7 +103,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                           ),
                           Text(
                             AppLocalizations.of(context)!.settings,
-                            style: TextStyle(fontSize: 22, color: green),
+                            style: TextStyle(fontSize: 22),
                           )
                         ],
                       ),
@@ -107,9 +118,9 @@ class _HomeLayoutState extends State<HomeLayout> {
       appBar: AppBar(
         title: (!inSearch)
             ? (Text(
-                (categoryTitle == null)
+                (categoryId == null)
                     ? "News App".toUpperCase()
-                    : categoryTitle!.toUpperCase(),
+                    : categoryTiTle!.toUpperCase(),
                 style: const TextStyle(fontSize: 22)))
             : TextFormField(
                 autofocus: true,
@@ -157,7 +168,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                 bottomRight: Radius.circular(18),
                 bottomLeft: Radius.circular(18))),
         actions: [
-          (!inSearch && categoryTitle != null)
+          (!inSearch && categoryId != null)
               ? IconButton(
                   onPressed: () {
                     inSearch = true;
@@ -167,7 +178,7 @@ class _HomeLayoutState extends State<HomeLayout> {
               : const SizedBox()
         ],
       ),
-      body: (categoryTitle == null)
+      body: (categoryId == null)
           ? CategoryScreen(onCategorySelected)
           : RefreshIndicator(
               onRefresh: () {
@@ -215,18 +226,19 @@ class _HomeLayoutState extends State<HomeLayout> {
                       titleOfSearch: searchController.text,
                     );
                   },
-                  future: ApiManager.getSources(categoryTitle!)),
+                  future: ApiManager.getSources(categoryId!)),
             ),
     );
   }
 
-  onCategorySelected(String? selectedCategory) {
-    categoryTitle = selectedCategory;
+  onCategorySelected(String? selectedCategoryId,selectedCategoryTitle) {
+    categoryId = selectedCategoryId;
+    categoryTiTle=selectedCategoryTitle;
     setState(() {});
   }
 
   toCategoryScreen() {
-    categoryTitle = null;
+    categoryId = null;
     inSearch = false;
     Navigator.pop(context);
     setState(() {});

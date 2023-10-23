@@ -18,10 +18,13 @@ class ApiManager {
   }
 
   static Future<NewsResponse> getNews(
-      {required String source, required bool inSearch, required String? searchTitle}) async {
+      {required String source,
+      required bool inSearch,
+      required String? searchTitle,
+      required String language}) async {
     if (!inSearch) {
       Uri url = Uri.parse(
-          "https://newsapi.org/v2/everything?apiKey=1a86229d4d5e448787eaa74230eb8462&sources=$source");
+          "https://newsapi.org/v2/everything?apiKey=1a86229d4d5e448787eaa74230eb8462&language=$language&sources=$source");
       http.Response response = await http.get(url);
       var jsonData = jsonDecode(response.body);
       NewsResponse newsResponse = NewsResponse.fromJson(jsonData);

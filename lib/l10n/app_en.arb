@@ -3,5 +3,11 @@
   "arabic": "Arabic",
   "english": "English",
   "settings": "Settings",
-  "category": "Category"
+  "category": "Category",
+  "sport": "Sports",
+  "science": "Science",
+  "general": "General",
+  "business": "Business",
+  "health": "Health",
+  "technology": "Technology"
 }

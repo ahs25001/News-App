@@ -1,0 +1,13 @@
+{
+ "language": "اللغه",
+  "arabic": "العربيه",
+  "english": "الانجليزيه",
+ "settings": "الاعدادات",
+ "category": "الموضوعات",
+ "sport": "الرياضة",
+ "science": "العلوم",
+ "general": "عام",
+ "business": "ادراة اعمال",
+ "health": "الصحة",
+ "technology": "التيكنولوجيا"
+}

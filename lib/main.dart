@@ -3,7 +3,7 @@ import 'package:news/layout/homeLayout.dart';
 import 'package:news/providers/my_provider.dart';
 import 'package:news/screens/details/detailScreen.dart';
 import 'package:news/screens/settings/settingsScreen.dart';
-import 'package:news/shard/style/mtTheme.dart';
+import 'package:news/shard/style/myTheme.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

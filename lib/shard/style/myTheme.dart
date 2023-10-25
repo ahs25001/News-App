@@ -4,6 +4,7 @@ import 'colors.dart';
 
 class MyTheme{
   static ThemeData myTheme=ThemeData(
+    scaffoldBackgroundColor: Colors.transparent,
     appBarTheme: AppBarTheme(
       titleTextStyle: const TextStyle(fontSize: 22),
       centerTitle: true,

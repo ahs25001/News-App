@@ -21,7 +21,7 @@ class NewsResponse {
   String? status;
   String? message;
   String? code;
-  int? totalResults;
+  num? totalResults;
   List<Articles>? articles;
 }
 

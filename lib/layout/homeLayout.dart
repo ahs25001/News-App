@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:news/providers/my_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/layout/cubit/HomeLayoutViewModel.dart';
+import 'package:news/models/categoryModel.dart';
 import 'package:news/screens/categories/categoryScreen.dart';
 import 'package:news/screens/settings/settingsScreen.dart';
-import 'package:news/screens/tabs/tabScreen.dart';
+import 'package:news/screens/tabs/newsScreen.dart';
 import 'package:news/shard/network/remote/api_manager.dart';
 import 'package:news/shard/style/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class HomeLayout extends StatefulWidget {
   static const String routName = "Home";
@@ -18,17 +19,15 @@ class HomeLayout extends StatefulWidget {
 }
 
 class _HomeLayoutState extends State<HomeLayout> {
-  String? categoryId;
-  String? categoryTiTle;
-  bool inSearch = false;
-  TextEditingController searchController = TextEditingController();
+  HomeLayoutViewModel homeLayoutViewModel = HomeLayoutViewModel();
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
+    homeLayoutViewModel.getSources(homeLayoutViewModel.categoryModel?.id ?? "");
     return Container(
       decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage("assets/images/background.png"))),
+          image: DecorationImage(
+              image: AssetImage("assets/images/background.png"))),
       child: Scaffold(
         drawer: Drawer(
           backgroundColor: Colors.white,
@@ -119,26 +118,26 @@ class _HomeLayoutState extends State<HomeLayout> {
           ),
         ),
         appBar: AppBar(
-          title: (!inSearch)
+          title: (!homeLayoutViewModel.inSearch)
               ? (Text(
-                  (categoryId == null)
+                  (homeLayoutViewModel.categoryModel == null)
                       ? "News App".toUpperCase()
-                      : categoryTiTle!.toUpperCase(),
+                      : homeLayoutViewModel.categoryModel!.title.toUpperCase(),
                 ))
               : TextFormField(
                   autofocus: true,
-                  controller: searchController,
+                  controller: homeLayoutViewModel.searchController,
                   decoration: InputDecoration(
-                      contentPadding:
-                          const EdgeInsets.symmetric(vertical: 2, horizontal: 3),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 2, horizontal: 3),
                       prefixIcon: IconButton(
                         icon: Icon(
                           Icons.close,
                           color: green,
                         ),
                         onPressed: () {
-                          inSearch = false;
-                          searchController.clear();
+                          homeLayoutViewModel.inSearch = false;
+                          homeLayoutViewModel.searchController.clear();
                           setState(() {});
                         },
                       ),
@@ -165,33 +164,38 @@ class _HomeLayoutState extends State<HomeLayout> {
                       hintStyle: const TextStyle(color: Colors.grey)),
                 ),
           actions: [
-            (!inSearch && categoryId != null)
+            (!homeLayoutViewModel.inSearch &&
+                    homeLayoutViewModel.categoryModel != null)
                 ? IconButton(
                     onPressed: () {
-                      inSearch = true;
+                      homeLayoutViewModel.inSearch = true;
                       setState(() {});
                     },
                     icon: const Icon(Icons.search))
                 : const SizedBox()
           ],
         ),
-        body: (categoryId == null)
+        body: (homeLayoutViewModel.categoryModel == null)
             ? CategoryScreen(onCategorySelected)
             : RefreshIndicator(
                 onRefresh: () {
                   setState(() {});
                   return Future.delayed(const Duration(seconds: 2));
                 },
-                child: FutureBuilder(
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      if (snapshot.hasError) {
+                child: BlocBuilder<HomeLayoutViewModel, GetSourcesState>(
+                  bloc: homeLayoutViewModel,
+                  builder: (context, state) {
+                    switch (state) {
+                      case Loading():
+                        return Center(
+                            child: CircularProgressIndicator(
+                          color: green,
+                        ));
+                      case Error():
                         return Center(
                           child: AlertDialog(
-                            content: const Text(
-                              "No InterNet",
+                            content: Text(
+                              state.errorMassage,
                             ),
                             title: const Text("Error"),
                             actions: [
@@ -215,29 +219,28 @@ class _HomeLayoutState extends State<HomeLayout> {
                             ],
                           ),
                         );
-                      }
-                      var sources = snapshot.data?.sources ?? [];
-                      return TabScreen(
-                        sources: sources,
-                        inSearch: inSearch,
-                        titleOfSearch: searchController.text,
-                      );
-                    },
-                    future: ApiManager.getSources(categoryId!)),
-              ),
+                      case Success():
+                        return TabScreen(
+                          sources: state.sources ?? [],
+                          inSearch: homeLayoutViewModel.inSearch,
+                          titleOfSearch:
+                              homeLayoutViewModel.searchController.text,
+                        );
+                    }
+                  },
+                )),
       ),
     );
   }
 
-  onCategorySelected(String? selectedCategoryId, selectedCategoryTitle) {
-    categoryId = selectedCategoryId;
-    categoryTiTle = selectedCategoryTitle;
+  onCategorySelected(CategoryModel selectedCategory) {
+    homeLayoutViewModel.categoryModel = selectedCategory;
     setState(() {});
   }
 
   toCategoryScreen() {
-    categoryId = null;
-    inSearch = false;
+    homeLayoutViewModel.categoryModel = null;
+    homeLayoutViewModel.inSearch = false;
     Navigator.pop(context);
     setState(() {});
   }

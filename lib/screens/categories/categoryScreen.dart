@@ -51,8 +51,7 @@ class CategoryScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return InkWell(
               onTap: () {
-                onCategorySelected(categories[index].id.toLowerCase(),
-                    categories[index].title);
+                onCategorySelected(categories[index]);
               },
               child: CategoryWidget(categories[index]));
         },

@@ -3,18 +3,19 @@ import 'package:news/layout/homeLayout.dart';
 import 'package:news/providers/my_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../shard/style/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../data/shard/style/colors.dart';
+
 class Settings extends StatelessWidget {
   static const String routName = "settings";
   Function toCategoryScreen;
-
 
   Settings(this.toCategoryScreen, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    var provider=Provider.of<MyProvider>(context);
+    var provider = Provider.of<MyProvider>(context);
     List<DropdownMenuItem<String>> menuItems = [
       DropdownMenuItem(
           child: Row(
@@ -27,13 +28,14 @@ class Settings extends StatelessWidget {
           value: "ar"),
       DropdownMenuItem(
           child: Row(
-            children: [Text( AppLocalizations.of(context)!.english)],
+            children: [Text(AppLocalizations.of(context)!.english)],
           ),
           value: "en"),
     ];
     return Container(
       decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage("assets/images/background.png"))),
+          image: DecorationImage(
+              image: AssetImage("assets/images/background.png"))),
       child: Scaffold(
         drawer: Drawer(
           backgroundColor: Colors.white,
@@ -67,7 +69,7 @@ class Settings extends StatelessWidget {
                             (route) => false,
                           );
                         },
-                        child:  Row(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(
@@ -89,7 +91,7 @@ class Settings extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () => Navigator.pop(context),
-                        child:  Row(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(
@@ -102,7 +104,7 @@ class Settings extends StatelessWidget {
                             ),
                             Text(
                               AppLocalizations.of(context)!.settings,
-                              style: TextStyle(fontSize: 22,color: green),
+                              style: TextStyle(fontSize: 22, color: green),
                             )
                           ],
                         ),
@@ -115,7 +117,8 @@ class Settings extends StatelessWidget {
           ),
         ),
         appBar: AppBar(
-          title:  Text(AppLocalizations.of(context)!.settings, style: TextStyle(fontSize: 22)),
+          title: Text(AppLocalizations.of(context)!.settings,
+              style: TextStyle(fontSize: 22)),
           centerTitle: true,
           backgroundColor: green,
           shape: const RoundedRectangleBorder(
@@ -175,7 +178,7 @@ class Settings extends StatelessWidget {
                 ),
                 items: menuItems,
                 onChanged: (value) {
-                  provider.changeLocal(value??"en");
+                  provider.changeLocal(value ?? "en");
                 },
               )
             ],

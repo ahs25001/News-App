@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:news/models/categoryModel.dart';
 import 'package:news/screens/categories/widgets/categoryWidget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../data/models/categoryModel.dart';
 
 class CategoryScreen extends StatelessWidget {
   Function onCategorySelected;

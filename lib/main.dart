@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:news/data/models/newsResponse.dart';
 import 'package:news/layout/homeLayout.dart';
 import 'package:news/providers/my_provider.dart';
+import 'package:news/screens/article_screen.dart';
 import 'package:news/screens/details/detailScreen.dart';
-import 'package:news/screens/settings/settingsScreen.dart';
-import 'package:news/shard/style/myTheme.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'data/shard/style/myTheme.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       routes: {
         HomeLayout.routName: (context) => const HomeLayout(),
-        DetailScreen.routName:(context) => const DetailScreen()
+        DetailScreen.routName: (context) => const DetailScreen(),
       },
       initialRoute: HomeLayout.routName,
       debugShowCheckedModeBanner: false,

@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:news/models/SourceResponse.dart';
-import 'package:news/models/newsResponse.dart';
+
+import '../../../models/SourceResponse.dart';
+import '../../../models/newsResponse.dart';
 
 class ApiManager {
-  static Future<SourceResponse> getSources(String category) async {
+  Future<SourceResponse> getSources(String category) async {
     Uri url = Uri.https(
       "newsapi.org",
       "/v2/top-headlines/sources",
@@ -17,14 +18,15 @@ class ApiManager {
     return sourceResponse;
   }
 
-  static Future<NewsResponse> getNews(
+  Future<NewsResponse> getNews(
       {required String source,
       required bool inSearch,
       required String? searchTitle,
+      required int pageNumber,
       required String language}) async {
     if (!inSearch) {
       Uri url = Uri.parse(
-          "https://newsapi.org/v2/everything?apiKey=1a86229d4d5e448787eaa74230eb8462&language=$language&sources=$source");
+          "https://newsapi.org/v2/everything?apiKey=1a86229d4d5e448787eaa74230eb8462&language=$language&sources=$source&pageSize=10&page=$pageNumber");
       http.Response response = await http.get(url);
       var jsonData = jsonDecode(response.body);
       NewsResponse newsResponse = NewsResponse.fromJson(jsonData);

@@ -12,15 +12,23 @@ class LanguageBottomSheet extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Arabic",style: TextStyle(fontSize: 22 ),),
+              Text(
+                "Arabic",
+                style: TextStyle(fontSize: 22),
+              ),
               Icon(Icons.done)
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Arabic",style: TextStyle(fontSize: 22 ),),
+              Text(
+                "Arabic",
+                style: TextStyle(fontSize: 22),
+              ),
               Icon(Icons.done)
             ],
           )

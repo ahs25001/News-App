@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news/models/categoryModel.dart';
+
+import '../../../data/models/categoryModel.dart';
 
 class CategoryWidget extends StatelessWidget {
   CategoryModel categoryModel;
@@ -20,7 +21,10 @@ class CategoryWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(child: categoryModel.image),
-          Text(categoryModel.title,style: const TextStyle(color: Colors.white,fontSize: 22),)
+          Text(
+            categoryModel.title,
+            style: const TextStyle(color: Colors.white, fontSize: 22),
+          )
         ],
       ),
     );

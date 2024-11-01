@@ -8,6 +8,7 @@ class MyTheme{
     appBarTheme: AppBarTheme(
       titleTextStyle: const TextStyle(fontSize: 22),
       centerTitle: true,
+      iconTheme: IconThemeData(color: Colors.white),
       backgroundColor: green,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(

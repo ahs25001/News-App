@@ -1,33 +1,70 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:news/models/SourceResponse.dart';
-import 'package:news/providers/my_provider.dart';
+import 'package:news/data/dataSourcesContract/NewsDataSource.dart';
+import 'package:news/data/dataSourcesImpl/NewsDataSourceImpl.dart';
+import 'package:news/data/repoImp/NewsRepoImpl.dart';
+import 'package:news/repoContract/NewsRepo.dart';
 import 'package:news/screens/tabs/widgets/articaleWidget.dart';
 import 'package:news/screens/tabs/widgets/tabItem.dart';
-import 'package:news/shard/network/remote/api_manager.dart';
-import 'package:provider/provider.dart';
+import '../../data/models/SourceResponse.dart';
+import '../../data/models/newsResponse.dart';
+import '../../data/shard/network/remote/api_manager.dart';
+import '../../data/shard/style/colors.dart';
 
-import '../../models/newsResponse.dart';
-
-class TabScreen extends StatefulWidget {
+class NewsScreen extends StatefulWidget {
   List<Sources> sources;
   bool inSearch;
   String? titleOfSearch;
 
-  TabScreen(
-      {super.key, required this.sources,
+  late NewsRepo newsRepo;
+  late NewsDataSource newsDataSource;
+  late ApiManager apiManager;
+
+  NewsScreen(
+      {super.key,
+      required this.sources,
       required this.inSearch,
-      required this.titleOfSearch});
+      required this.titleOfSearch}) {
+    apiManager = ApiManager();
+    newsDataSource = NewsDataSourceImpl(apiManager);
+    newsRepo = NewsRepoImpl(newsDataSource);
+  }
 
   @override
-  State<TabScreen> createState() => _TabScreenState();
+  State<NewsScreen> createState() => _NewsScreenState();
 }
 
-class _TabScreenState extends State<TabScreen> {
+class _NewsScreenState extends State<NewsScreen> {
   int ind = 0;
+  int pageNumber = 1;
+  bool inNextPage = false;
+  List<Articles> data = [];
+  late ScrollController listController;
+
+  @override
+  void initState() {
+    listController = ScrollController();
+    listController.addListener(() {
+      if (listController.position.atEdge) {
+        if (listController.position.pixels != 0) {
+          setState(() {
+            pageNumber++;
+            inNextPage = true;
+          });
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    listController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 13.0),
       child: Column(
@@ -37,9 +74,14 @@ class _TabScreenState extends State<TabScreen> {
               child: TabBar(
                 onTap: (value) {
                   ind = value;
+                  data = [];
+                  pageNumber = 1;
+                  inNextPage = false;
+                  listController.jumpTo(0);
                   setState(() {});
                 },
                 indicatorColor: Colors.transparent,
+                dividerColor: Colors.transparent,
                 isScrollable: true,
                 tabs: widget.sources
                     .map((e) => TabItem(
@@ -49,29 +91,43 @@ class _TabScreenState extends State<TabScreen> {
                     .toList(),
               )),
           FutureBuilder(
-            future: ApiManager.getNews(
-                source: widget.sources[ind].id ?? "",
+            future: widget.newsRepo.getNews(widget.sources[ind].id ?? "",
                 inSearch: widget.inSearch,
+                pageNumber: pageNumber,
                 searchTitle: widget.titleOfSearch,
-                language: provider.local),
+                language: "en"),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+              if (snapshot.connectionState == ConnectionState.waiting &&
+                  data.isEmpty) {
+                return Center(child: CircularProgressIndicator(color: green));
               }
               if (snapshot.hasError) {
                 return const Text("Error");
               }
-              List<Articles> data = snapshot.data?.articles ?? [];
+              if (data.isEmpty || inNextPage) {
+                data.addAll(snapshot.data ?? []);
+                print(pageNumber);
+                print(data.length);
+                inNextPage = false;
+              }
               return Expanded(
                 child: ListView.builder(
+                  controller: listController,
                   itemBuilder: (context, index) {
-                    return ArticleWidget(data[index]);
+                    if(index==data.length){
+                      return Center(child: CircularProgressIndicator(color: green));
+                    }
+                    return FadeInDown(child: ArticleWidget(data[index]));
                   },
-                  itemCount: data.length,
+                  itemCount: data.length +
+                      ((snapshot.connectionState == ConnectionState.waiting &&
+                              data.isNotEmpty)
+                          ? 1
+                          : 0),
                 ),
               );
             },
-          )
+          ),
         ],
       ),
     );

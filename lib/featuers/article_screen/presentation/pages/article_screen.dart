@@ -1,6 +1,7 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_app/featuers/artical_web_view/presentation/pages/artical_web_view.dart';
 
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_styles.dart';
@@ -14,12 +15,20 @@ class ArticleScreen extends StatelessWidget {
     var args = ModalRoute.of(context)!.settings.arguments as Articles;
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage(backgroundImage))),
+          image: DecorationImage(
+              image: AssetImage(
+                backgroundImage,
+              ),
+              fit: BoxFit.cover)),
       child: Scaffold(
         appBar: AppBar(
           title: Hero(
               tag: "${args.source?.id}${args.source?.name}",
-              child: Text(args.source?.name ?? "")),
+              child: Material(
+                color: Colors.transparent,
+                textStyle: appBarTitleStyle,
+                child: Text(args.source?.name ?? ""),
+              )),
         ),
         body: Column(
           children: [
@@ -42,14 +51,34 @@ class ArticleScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Column(
                 children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Hero(
+                        tag:
+                            "${args.url}${args.title}${args.author}${args.author}",
+                        child: Material(
+                          textStyle:articleDateStyle ,
+                            color: Colors.transparent,
+                            child: Text(
+                              args.author ?? "",
+                              style: articleDateStyle,
+                            ))),
+                  ),
+                  SizedBox(
+                    height: 15.h,),
                   Text(
                     args.title ?? "",
                     style: articleTitleStyle,
                   ),
-                  SizedBox(height: 15.h,),
+                  SizedBox(
+                    height: 15.h,
+                  ),
                   Align(
                       alignment: Alignment.centerRight,
-                      child: Text(args.publishedAt ?? "",style: articleDateStyle,))
+                      child: Text(
+                        args.publishedAt ?? "",
+                        style: articleDateStyle,
+                      ))
                 ],
               ),
             ),
@@ -59,15 +88,30 @@ class ArticleScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25.r)),
               margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               child: Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 20.w,vertical: 20.h),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: Column(
                   children: [
                     Text(
                       args.description ?? "",
                       style: articleDescriptionStyle,
                     ),
-                    SizedBox(height: 30.h,),
-                    Text("view in browser",style: viewInBrowserStyle,)
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ArticleWebView(args.url ?? ""),
+                            ));
+                      },
+                      child: Text(
+                        "view in browser",
+                        style: viewInBrowserStyle,
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -9,7 +9,7 @@ class CategoryItem extends StatelessWidget {
   CategoryModel categoryModel;
   int index;
 
-  CategoryItem(this.categoryModel, this.index);
+  CategoryItem(this.categoryModel, this.index, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,9 @@ class CategoryItem extends StatelessWidget {
         Navigator.pushNamed(context, AppRoutes.home, arguments: categoryModel);
       },
       child: FadeInUp(
-        delay: index==0?Duration(milliseconds:70):Duration(milliseconds: index*100),
+        delay: index == 0
+            ? const Duration(milliseconds: 70)
+            : Duration(milliseconds: index * 100),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           decoration: BoxDecoration(
@@ -32,7 +34,14 @@ class CategoryItem extends StatelessWidget {
                       index % 2 != 0 ? Radius.zero : Radius.circular(25.r))),
           child: Column(
             children: [
-              Image.asset(categoryModel.image, width: 132.w, height: 116.h),
+              Hero(
+                tag: "${categoryModel.id}${categoryModel.name}",
+                child: Material(
+                  color: Colors.transparent,
+                  child: Image.asset(categoryModel.image,
+                      width: 132.w, height: 116.h),
+                ),
+              ),
               SizedBox(
                 height: 25.h,
               ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:news_app/featuers/article_screen/presentation/pages/article_screen.dart';
 
 import '../../featuers/home_screen/presentation/pages/home_screen.dart';
@@ -15,14 +15,15 @@ class Routes {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.selectCategory:
-        return MaterialPageRoute(builder: (context) => SelectCategoryScreen());
+        return CupertinoPageRoute(builder: (context) => SelectCategoryScreen());
       case AppRoutes.home:
-        return MaterialPageRoute(
+        return CupertinoPageRoute(
             builder: (context) => HomeScreen(), settings: settings);
       case AppRoutes.articles:
-        return MaterialPageRoute(builder: (context) => ArticleScreen(),settings: settings);
+        return CupertinoPageRoute(
+            builder: (context) => ArticleScreen(), settings: settings);
       default:
-        return MaterialPageRoute(builder: (context) => SelectCategoryScreen());
+        return CupertinoPageRoute(builder: (context) => SelectCategoryScreen());
     }
   }
 }

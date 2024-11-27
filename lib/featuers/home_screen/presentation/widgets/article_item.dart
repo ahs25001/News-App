@@ -17,7 +17,7 @@ class ArticleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.articles,arguments: articles);
+        Navigator.pushNamed(context, AppRoutes.articles, arguments: articles);
       },
       child: FadeInDown(
         child: Container(
@@ -33,7 +33,8 @@ class ArticleItem extends StatelessWidget {
               Hero(
                 tag: "${articles?.url}${articles?.title}${articles?.author}",
                 child: ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(25.r)),
                   child: FancyShimmerImage(
                     imageUrl: '${articles?.urlToImage}',
                     width: 360.w,
@@ -45,9 +46,17 @@ class ArticleItem extends StatelessWidget {
               SizedBox(
                 height: 15.h,
               ),
-              Text(
-                articles?.author ?? "",
-                style: authorNameStyle,
+              Hero(
+                tag:
+                    "${articles?.url}${articles?.title}${articles?.author}${articles?.author}",
+                child: Material(
+                  color: Colors.transparent,
+                  textStyle: authorNameStyle,
+                  child: Text(
+                    articles?.author ?? "",
+                    style: authorNameStyle,
+                  ),
+                ),
               ),
               SizedBox(
                 height: 10.h,

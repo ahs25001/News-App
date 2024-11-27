@@ -37,7 +37,7 @@ class SelectCategoryScreen extends StatelessWidget {
                   itemCount: categories.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisSpacing: 10.w,
-                        childAspectRatio: 148/171,
+                        childAspectRatio: 148.h/171.w,
                         mainAxisSpacing: 10.h,
                         crossAxisCount: 2),
                     itemBuilder: (context, index) => CategoryItem(

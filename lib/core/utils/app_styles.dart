@@ -60,3 +60,4 @@ TextStyle viewInBrowserStyle = TextStyle(
   fontWeight: FontWeight.w400,
   fontSize: 14.sp,
 );
+ButtonStyle tryAgainButtonStyle=ElevatedButton.styleFrom(backgroundColor: primaryColor);

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:meta/meta.dart';
 import 'package:news_app/core/errors/errors.dart';
 import 'package:news_app/featuers/home_screen/data/data_sources/home_ds_impl.dart';
@@ -16,21 +17,30 @@ class HomeCubit extends Cubit<HomeState> {
 
   static HomeCubit get(context) => BlocProvider.of(context);
 
+  Future<bool> checkOnInternet() async {
+    bool isConnected = await InternetConnection().hasInternetAccess;
+    return isConnected;
+  }
+
   Future<void> getSources(String categoryId, String language) async {
     emit(state.copyWith(homeStatus: HomeStatus.getSourcesLoading));
-
-    HomeRepo homeRepo = HomeRepoImpl(HomeDsImpl());
-    final failureOrSources = await homeRepo.getSources(categoryId, language);
-    failureOrSources.fold(
-        (failure) =>
-            emit(state.copyWith(errors: failure, homeStatus: HomeStatus.error)),
-        (sources) async{
-      emit(state.copyWith(
-          homeStatus: HomeStatus.getSourcesLoaded,
-          sourceModel: sources,
-          index: 0));
-      await getArticles(sources.sources?[0].id ?? "");
-    });
+    bool isConnected = await checkOnInternet();
+    if (!isConnected) {
+      emit(state.copyWith(homeStatus: HomeStatus.noInternet));
+    } else {
+      HomeRepo homeRepo = HomeRepoImpl(HomeDsImpl());
+      final failureOrSources = await homeRepo.getSources(categoryId, language);
+      failureOrSources.fold(
+          (failure) => emit(
+              state.copyWith(errors: failure, homeStatus: HomeStatus.error)),
+          (sources) async {
+        emit(state.copyWith(
+            homeStatus: HomeStatus.getSourcesLoaded,
+            sourceModel: sources,
+            index: 0));
+        await getArticles(sources.sources?[0].id ?? "");
+      });
+    }
   }
 
   void changeSource(int index) async {

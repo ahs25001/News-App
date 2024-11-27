@@ -6,6 +6,8 @@ enum HomeStatus {
   getSourcesLoaded,
   getArticlesLoading,
   getArticlesLoaded,
+  isConnected,
+  noInternet,
   error
 }
 

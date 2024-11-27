@@ -14,13 +14,16 @@ class SourceItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Hero(
       tag: "$sourceId$sourceName",
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-        decoration: BoxDecoration(
-          border: Border.all(color: primaryColor),
-            color: isSelect ? primaryColor : Colors.transparent,
-            borderRadius: BorderRadius.circular(25.r)),
-        child: Text(sourceName,style: isSelect?selectedLabelStyle:unselectedLabelStyle,),
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          decoration: BoxDecoration(
+            border: Border.all(color: primaryColor),
+              color: isSelect ? primaryColor : Colors.transparent,
+              borderRadius: BorderRadius.circular(25.r)),
+          child: Text(sourceName,style: isSelect?selectedLabelStyle:unselectedLabelStyle,),
+        ),
       ),
     );
   }

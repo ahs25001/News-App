@@ -1,0 +1,1 @@
+String noInternet="assets/json/noInternet.json";

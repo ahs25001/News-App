@@ -8,5 +8,6 @@ abstract class HomeDs {
   Future<Either<Errors, SourceModel>> getSources(
       String categoryId, String language);
 
-  Future<Either<Errors, ArticlesModel>> getArticles(String sourceId);
+  Future<Either<Errors, ArticlesModel>> getArticles(String sourceId,
+      {required bool? isSearch, String? query});
 }

@@ -19,6 +19,6 @@ class HomeRepoImpl implements HomeRepo {
       homeDs.getSources(categoryId, language);
 
   @override
-  Future<Either<Errors, ArticlesModel>> getArticles(String sourceId) =>
-      homeDs.getArticles(sourceId);
+  Future<Either<Errors, ArticlesModel>> getArticles(String sourceId,{required bool? isSearch, String? query}) =>
+      homeDs.getArticles(sourceId, isSearch: isSearch, query: query);
 }

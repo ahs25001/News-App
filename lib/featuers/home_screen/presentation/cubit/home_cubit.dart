@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:meta/meta.dart';
@@ -14,12 +15,22 @@ part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
+  TextEditingController searchController = TextEditingController();
 
   static HomeCubit get(context) => BlocProvider.of(context);
 
   Future<bool> checkOnInternet() async {
     bool isConnected = await InternetConnection().hasInternetAccess;
     return isConnected;
+  }
+
+  void goTOSearch() {
+    emit(state.copyWith(isInSearch: true));
+  }
+
+  void cancelSearch() {
+    searchController.clear();
+    emit(state.copyWith(isInSearch: false));
   }
 
   Future<void> getSources(String categoryId, String language) async {
@@ -52,7 +63,8 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(homeStatus: HomeStatus.getArticlesLoading));
 
     HomeRepo homeRepo = HomeRepoImpl(HomeDsImpl());
-    final failureOrArticles = await homeRepo.getArticles(sourceId);
+    final failureOrArticles = await homeRepo.getArticles(sourceId,
+        isSearch: state.isInSearch, query: searchController.text);
     failureOrArticles.fold(
         (failure) =>
             emit(state.copyWith(errors: failure, homeStatus: HomeStatus.error)),

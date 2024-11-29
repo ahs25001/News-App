@@ -6,7 +6,10 @@ import 'package:news_app/core/utils/app_colors.dart';
 import 'package:news_app/core/utils/app_json.dart';
 import 'package:news_app/core/utils/app_styles.dart';
 import 'package:news_app/featuers/home_screen/presentation/cubit/home_cubit.dart';
+import 'package:news_app/featuers/home_screen/presentation/widgets/article_loading.dart';
+import 'package:news_app/featuers/home_screen/presentation/widgets/search_form_field.dart';
 import 'package:news_app/featuers/home_screen/presentation/widgets/source_item.dart';
+import 'package:news_app/featuers/home_screen/presentation/widgets/sources_loading.dart';
 import 'package:news_app/featuers/select_category/data/models/category_model.dart';
 
 import '../../../../core/utils/app_images.dart';
@@ -27,34 +30,91 @@ class HomeScreen extends StatelessWidget {
         create: (context) => HomeCubit()..getSources(args.id, "en"),
         child: Scaffold(
           appBar: AppBar(
-            title: Hero(
-                tag: "${args.id}${args.name}",
-                child: Material(
-                    textStyle: appBarTitleStyle,
-                    color: Colors.transparent,
-                    child: Text(args.name))),
+            automaticallyImplyLeading: false,
+            title: BlocSelector<HomeCubit, HomeState, bool>(
+              selector: (state) {
+                return state.isInSearch;
+              },
+              builder: (context, isInSearch) {
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 400),
+                  switchInCurve: Curves.easeInQuart,
+                  switchOutCurve: Curves.easeInQuart,
+                  transitionBuilder: (child, animation) => ScaleTransition(
+                    alignment: Alignment.centerRight,
+                    scale: animation,
+                    // sizeFactor: animation,
+                    child: child,
+                  ),
+                  child: (isInSearch)
+                      ? SearchFormField(context)
+                      : Hero(
+                          tag: "${args.id}${args.name}",
+                          child: Material(
+                              textStyle: appBarTitleStyle,
+                              color: Colors.transparent,
+                              child: Text(
+                                args.name,
+                                textAlign: TextAlign.center,
+                              ))),
+                );
+              },
+            ),
+            actions: [
+              BlocSelector<HomeCubit, HomeState, bool>(
+                selector: (state) {
+                  return state.isInSearch;
+                },
+                builder: (context, isInSearch) {
+                  return isInSearch
+                      ? const SizedBox()
+                      : InkWell(
+                          onTap: () {
+                            HomeCubit.get(context).goTOSearch();
+                          },
+                          child: Icon(
+                            Icons.search,
+                            size: 40.sp,
+                            color: Colors.white,
+                          ),
+                        );
+                },
+              ),
+              SizedBox(
+                width: 20.w,
+              )
+            ],
           ),
           body: BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
               return (state.homeStatus == HomeStatus.getSourcesLoading)
-                  ? Center(
-                      child: CircularProgressIndicator(
-                      color: primaryColor,
-                    ))
+                  ? Column(
+                children: [
+                  SizedBox(
+                    height: 10.h,),
+                  const SourcesLoading(),
+                  const ArticleLoading()
+                ],
+              )
                   : (state.homeStatus == HomeStatus.noInternet)
                       ? Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Lottie.asset(noInternet),
-                            ElevatedButton(
-                                style: tryAgainButtonStyle,
-                                onPressed: (){
-                              HomeCubit.get(context).getSources(args.id, "en");
-                            }, child: Text("Tray again",style: appBarTitleStyle,))
-                          ],
-                        ),
-                      )
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Lottie.asset(noInternet),
+                              ElevatedButton(
+                                  style: tryAgainButtonStyle,
+                                  onPressed: () {
+                                    HomeCubit.get(context)
+                                        .getSources(args.id, "en");
+                                  },
+                                  child: Text(
+                                    "Tray again",
+                                    style: appBarTitleStyle,
+                                  ))
+                            ],
+                          ),
+                        )
                       : Column(
                           children: [
                             SizedBox(
@@ -85,9 +145,7 @@ class HomeScreen extends StatelessWidget {
                               height: 10.h,
                             ),
                             (state.homeStatus == HomeStatus.getArticlesLoading)
-                                ? CircularProgressIndicator(
-                                    color: primaryColor,
-                                  )
+                                ?  const ArticleLoading()
                                 : Expanded(
                                     child: RefreshIndicator(
                                       onRefresh: () async {

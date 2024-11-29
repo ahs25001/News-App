@@ -15,6 +15,7 @@ enum HomeStatus {
 class HomeState {
   HomeStatus? homeStatus;
   SourceModel? sourceModel;
+  bool isInSearch;
   Errors? errors;
   int? index;
   ArticlesModel? articlesModel;
@@ -22,6 +23,7 @@ class HomeState {
   HomeState(
       {this.homeStatus,
       this.sourceModel,
+      this.isInSearch = false,
       this.articlesModel,
       this.index,
       this.errors});
@@ -29,12 +31,14 @@ class HomeState {
   HomeState copyWith(
       {HomeStatus? homeStatus,
       int? index,
+      bool? isInSearch,
       ArticlesModel? articlesModel,
       SourceModel? sourceModel,
       Errors? errors}) {
     return HomeState(
         articlesModel: articlesModel ?? this.articlesModel,
         index: index ?? this.index,
+        isInSearch: isInSearch ?? this.isInSearch,
         homeStatus: homeStatus ?? this.homeStatus,
         sourceModel: sourceModel ?? this.sourceModel,
         errors: errors ?? this.errors);

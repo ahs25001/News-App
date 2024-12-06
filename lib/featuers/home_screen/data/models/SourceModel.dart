@@ -1,4 +1,6 @@
-class SourceModel {
+import 'package:equatable/equatable.dart';
+
+class SourceModel extends Equatable{
   SourceModel({
       this.status, 
       this.sources,});
@@ -14,9 +16,13 @@ class SourceModel {
   }
   String? status;
   List<Sources>? sources;
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [sources];
 }
 
-class Sources {
+class Sources extends Equatable{
   Sources({
       this.id, 
       this.name, 
@@ -42,6 +48,10 @@ class Sources {
   String? category;
   String? language;
   String? country;
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id];
 
 
 }

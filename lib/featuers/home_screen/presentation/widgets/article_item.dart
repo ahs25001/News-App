@@ -6,6 +6,7 @@ import 'package:news_app/config/routes/routes.dart';
 import 'package:news_app/core/utils/app_colors.dart';
 import 'package:news_app/featuers/home_screen/data/models/ArticlesModel.dart';
 
+import '../../../../config/themes/themes.dart';
 import '../../../../core/utils/app_styles.dart';
 
 class ArticleItem extends StatelessWidget {
@@ -26,7 +27,7 @@ class ArticleItem extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(25.r),
-              border: Border.all(color: primaryColor)),
+              border: Border.all(color: lightTheme.colorScheme.primary)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

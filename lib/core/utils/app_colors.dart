@@ -1,6 +1,10 @@
-import 'dart:ui';
 
-Color primaryColor = const Color(0XFF39A552);
+import 'package:flutter/material.dart';
+
+Color greenPrimaryColor = const Color(0XFF39A552);
+Color redPrimaryColor =  Colors.red;
+Color blackColor = const Color(0XFF303030);
+Color purplePrimaryColor = Colors.purple;
 Color secondaryColor = const Color(0XFF4F5A69);
 Color sportsColor= const Color(0XFFC91C22);
 Color generalColor = const Color(0XFF003E90);

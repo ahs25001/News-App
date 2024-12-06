@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/featuers/artical_web_view/presentation/pages/artical_web_view.dart';
 
+import '../../../../config/themes/themes.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_styles.dart';
 import '../../../home_screen/data/models/ArticlesModel.dart';
@@ -21,6 +22,7 @@ class ArticleScreen extends StatelessWidget {
               ),
               fit: BoxFit.cover)),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Hero(
               tag: "${args.source?.id}${args.source?.name}",
@@ -109,7 +111,7 @@ class ArticleScreen extends StatelessWidget {
                       },
                       child: Text(
                         "view in browser",
-                        style: viewInBrowserStyle,
+                        style: viewInBrowserStyle.copyWith(color:lightTheme.colorScheme.primary),
                       ),
                     )
                   ],

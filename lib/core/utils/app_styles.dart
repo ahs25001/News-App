@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/core/utils/app_colors.dart';
 
+import '../../config/themes/themes.dart';
 import 'app_constants.dart';
 
 TextStyle selectMassageStyle = TextStyle(
@@ -24,7 +25,7 @@ TextStyle selectedLabelStyle = TextStyle(
   fontSize: 16.sp,
 );
 TextStyle unselectedLabelStyle = TextStyle(
-  color: primaryColor,
+  color: lightTheme.colorScheme.primary,
   fontFamily: exoFont,
   fontWeight: FontWeight.w400,
   fontSize: 16.sp,
@@ -56,8 +57,17 @@ TextStyle articleDateStyle = TextStyle(
   fontSize: 14.sp,
 );
 TextStyle viewInBrowserStyle = TextStyle(
-  color: primaryColor,
+  color: greenPrimaryColor,
   fontWeight: FontWeight.w400,
   fontSize: 14.sp,
 );
-ButtonStyle tryAgainButtonStyle=ElevatedButton.styleFrom(backgroundColor: primaryColor);
+TextStyle optionsTitleStyle =TextStyle(
+    color: blackColor,
+    fontWeight: FontWeight.w700,
+    fontSize: 22.sp
+);
+TextStyle optionsStyle =TextStyle(
+    color: greenPrimaryColor,
+    fontWeight: FontWeight.w400,
+    fontSize: 18.sp
+);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../../config/themes/themes.dart';
+
 class ArticleWebView extends StatefulWidget {
   String url;
 
@@ -54,10 +56,10 @@ class _ArticleWebViewState extends State<ArticleWebView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        // backgroundColor: Colors.green,
         title: Text("News App"),
       ),
-      body: (loading)?Center(child: CircularProgressIndicator(color: Colors.green,),):WebViewWidget(controller: controller),
+      body: (loading)?Center(child: CircularProgressIndicator(color:lightTheme.colorScheme.primary,),):WebViewWidget(controller: controller),
     );
   }
 }

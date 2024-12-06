@@ -22,7 +22,7 @@ class ArticleLoading extends StatelessWidget {
               decoration: BoxDecoration(
                   // color: Colors.white,
                   borderRadius: BorderRadius.circular(25.r),
-                  border: Border.all(color: primaryColor)),
+                  border: Border.all(color: Theme.of(context).primaryColor)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../featuers/select_category/data/models/category_model.dart';
 import 'app_colors.dart';
 import 'app_images.dart';
@@ -5,6 +7,8 @@ import 'app_images.dart';
 String exoFont = "Exo";
 String poppinsFont = "Poppins";
 String interFont = "Inter";
+String apiKey = "1a86229d4d5e448787eaa74230eb8462";
+String baseUrl = "https://newsapi.org/v2/";
 List<CategoryModel> categories = [
   CategoryModel(
       image: sportsImage, name: "Sports", color: sportsColor, id: "sports"),
@@ -25,5 +29,13 @@ List<CategoryModel> categories = [
       color: environmentColor,
       id: "entertainment"),
 ];
-String apiKey = "1a86229d4d5e448787eaa74230eb8462";
-String baseUrl = "https://newsapi.org/v2/";
+List<Color> colors = [
+  greenPrimaryColor,
+  sportsColor,
+  businessColor,
+  healthColor,
+  generalColor,
+  scienceColor,
+  environmentColor,
+  purplePrimaryColor
+];

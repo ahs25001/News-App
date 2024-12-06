@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/core/utils/app_images.dart';
 
+import '../../../../config/routes/routes.dart';
 import '../../../../core/utils/app_constants.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/app_styles.dart';
@@ -14,11 +15,13 @@ class SelectCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(backgroundImage)),
+        image: DecorationImage(image: AssetImage(backgroundImage,),fit: BoxFit.cover),
       ),
       child: Scaffold(
         appBar: AppBar(
-          leading: Icon(Icons.settings),
+          leading: InkWell(
+              onTap: () => Navigator.pushNamed(context, AppRoutes.settings),
+              child: Icon(Icons.settings)),
           title: Text(appName),
         ),
         backgroundColor: Colors.transparent,

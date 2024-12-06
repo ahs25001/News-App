@@ -1,4 +1,6 @@
-class ArticlesModel {
+import 'package:equatable/equatable.dart';
+
+class ArticlesModel extends Equatable{
   ArticlesModel({
       this.status, 
       this.totalResults, 
@@ -28,9 +30,13 @@ class ArticlesModel {
     return map;
   }
 
+  @override
+  // TODO: implement props
+  List<Object?> get props => [articles];
+
 }
 
-class Articles {
+class Articles extends Equatable{
   Articles({
       this.source, 
       this.author, 
@@ -75,9 +81,13 @@ class Articles {
     return map;
   }
 
+  @override
+  // TODO: implement props
+  List<Object?> get props => [url,content];
+
 }
 
-class Source {
+class Source extends Equatable{
   Source({
       this.id, 
       this.name,});
@@ -95,5 +105,9 @@ class Source {
     map['name'] = name;
     return map;
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id];
 
 }

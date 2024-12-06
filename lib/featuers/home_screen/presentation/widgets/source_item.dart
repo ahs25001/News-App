@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_app/config/themes/themes.dart';
 import 'package:news_app/core/utils/app_colors.dart';
 import 'package:news_app/core/utils/app_styles.dart';
 
@@ -19,10 +20,10 @@ class SourceItem extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           decoration: BoxDecoration(
-            border: Border.all(color: primaryColor),
-              color: isSelect ? primaryColor : Colors.transparent,
+            border: Border.all(color: lightTheme.colorScheme.primary),
+              color: isSelect ? lightTheme.colorScheme.primary : Colors.transparent,
               borderRadius: BorderRadius.circular(25.r)),
-          child: Text(sourceName,style: isSelect?selectedLabelStyle:unselectedLabelStyle,),
+          child: Text(sourceName,style: isSelect?selectedLabelStyle:unselectedLabelStyle.copyWith(color:lightTheme.colorScheme.primary),),
         ),
       ),
     );

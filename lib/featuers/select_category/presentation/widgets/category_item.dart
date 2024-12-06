@@ -2,6 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/config/routes/routes.dart';
+import 'package:news_app/core/utils/app_constants.dart';
+import 'package:news_app/featuers/settings_screen/presentation/cubit/settings_cubit.dart';
 import '../../../../core/utils/app_styles.dart';
 import '../../data/models/category_model.dart';
 
@@ -15,6 +17,9 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        if(SettingsCubit.get(context).state.isAutoTheme) {
+          SettingsCubit.get(context).changePrimaryColor(colors.indexOf(categoryModel.color));
+        }
         Navigator.pushNamed(context, AppRoutes.home, arguments: categoryModel);
       },
       child: FadeInUp(

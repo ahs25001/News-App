@@ -14,33 +14,41 @@ enum HomeStatus {
 @immutable
 class HomeState {
   HomeStatus? homeStatus;
-  SourceModel? sourceModel;
+  List<Sources>? sources;
   bool isInSearch;
+  bool isInSearchResult;
   Errors? errors;
   int? index;
-  ArticlesModel? articlesModel;
+  List<Articles>? articles;
+  int pageNumber;
 
   HomeState(
       {this.homeStatus,
-      this.sourceModel,
+      this.sources,
+      this.pageNumber = 1,
+      this.isInSearchResult = false,
       this.isInSearch = false,
-      this.articlesModel,
+      this.articles,
       this.index,
       this.errors});
 
   HomeState copyWith(
       {HomeStatus? homeStatus,
       int? index,
+      bool? isInSearchResult,
+      int? pageNumber,
       bool? isInSearch,
-      ArticlesModel? articlesModel,
-      SourceModel? sourceModel,
+      List<Articles>? articles,
+      List<Sources>? sources,
       Errors? errors}) {
     return HomeState(
-        articlesModel: articlesModel ?? this.articlesModel,
+        isInSearchResult: isInSearchResult ?? this.isInSearchResult,
+        pageNumber: pageNumber ?? this.pageNumber,
+        articles: articles ?? this.articles,
         index: index ?? this.index,
         isInSearch: isInSearch ?? this.isInSearch,
         homeStatus: homeStatus ?? this.homeStatus,
-        sourceModel: sourceModel ?? this.sourceModel,
+        sources: sources ?? this.sources,
         errors: errors ?? this.errors);
   }
 }

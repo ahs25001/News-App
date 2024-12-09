@@ -4,6 +4,7 @@ import 'package:news_app/core/utils/app_styles.dart';
 
 import '../../../../config/themes/themes.dart';
 import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/app_strings.dart';
 import '../cubit/home_cubit.dart';
 
 class SearchFormField extends StatelessWidget {
@@ -19,18 +20,16 @@ class SearchFormField extends StatelessWidget {
       cursorOpacityAnimates: true,
       autofocus: true,
       onFieldSubmitted: (value) {
-        HomeCubit.get(this.context).getArticles(
+        HomeCubit.get(this.context).getSearchResultArticles(
             HomeCubit.get(this.context)
-                .state
-                .sourceModel
-                ?.sources?[0]
+                .state.sources?[0]
                 .id ??
                 "");
       },
       textInputAction: TextInputAction.search,
       style: articleTitleStyle,
       decoration: InputDecoration(
-        hintText: "Search for articles",
+        hintText: hintSearch,
           hintStyle: unselectedLabelStyle.copyWith(color:lightTheme.colorScheme.primary),
           prefixIcon: InkWell(
               onTap: () {

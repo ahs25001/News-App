@@ -15,6 +15,7 @@ part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
+
   TextEditingController searchController = TextEditingController();
 
   static HomeCubit get(context) => BlocProvider.of(context);
@@ -26,15 +27,17 @@ class HomeCubit extends Cubit<HomeState> {
 
   void goTOSearch() {
     emit(state.copyWith(isInSearch: true));
+    print("in search result ${state.isInSearchResult}");
   }
 
   void cancelSearch() {
     searchController.clear();
-    emit(state.copyWith(isInSearch: false));
+    emit(state.copyWith(isInSearch: false, isInSearchResult: false));
   }
 
   Future<void> getSources(String categoryId, String language) async {
     emit(state.copyWith(homeStatus: HomeStatus.getSourcesLoading));
+    print("in get sources ==================================");
     bool isConnected = await checkOnInternet();
     if (!isConnected) {
       emit(state.copyWith(homeStatus: HomeStatus.noInternet));
@@ -47,7 +50,7 @@ class HomeCubit extends Cubit<HomeState> {
           (sources) async {
         emit(state.copyWith(
             homeStatus: HomeStatus.getSourcesLoaded,
-            sourceModel: sources,
+            sources: sources.sources,
             index: 0));
         await getArticles(sources.sources?[0].id ?? "");
       });
@@ -55,21 +58,56 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void changeSource(int index) async {
-    emit(state.copyWith(index: index));
-    await getArticles(state.sourceModel?.sources?[index].id ?? "");
+    emit(state.copyWith(index: index, articles: []));
+    await getArticles(state.sources?[index].id ?? "");
   }
 
-  Future<void> getArticles(String sourceId) async {
-    emit(state.copyWith(homeStatus: HomeStatus.getArticlesLoading));
+  Future<void> getArticles(String sourceId, {bool refresh = false}) async {
+    emit(state.copyWith(
+      pageNumber: refresh?1:null,
+        homeStatus: HomeStatus.getArticlesLoading,
+        articles: refresh ? [] : state.articles));
 
     HomeRepo homeRepo = HomeRepoImpl(HomeDsImpl());
     final failureOrArticles = await homeRepo.getArticles(sourceId,
-        isSearch: state.isInSearch, query: searchController.text);
+        isSearch: state.isInSearch,
+        query: searchController.text,
+        pageNumber: state.pageNumber);
     failureOrArticles.fold(
         (failure) =>
             emit(state.copyWith(errors: failure, homeStatus: HomeStatus.error)),
-        (articles) => emit(state.copyWith(
-            homeStatus: HomeStatus.getArticlesLoaded,
-            articlesModel: articles)));
+        (articles) {
+      List<Articles> newArticles = state.articles ?? [];
+      newArticles.addAll(articles.articles ?? []);
+      int newPageNumber = state.pageNumber + 1;
+      emit(state.copyWith(
+          homeStatus: HomeStatus.getArticlesLoaded,
+          articles: newArticles,
+          pageNumber: newPageNumber));
+    });
+  }
+
+  Future<void> getSearchResultArticles(String sourceId) async {
+    emit(state
+        .copyWith(homeStatus: HomeStatus.getArticlesLoading, articles: []));
+
+    HomeRepo homeRepo = HomeRepoImpl(HomeDsImpl());
+    final failureOrArticles = await homeRepo.getArticles(sourceId,
+        isSearch: state.isInSearch,
+        query: searchController.text,
+        pageNumber: state.pageNumber);
+    failureOrArticles.fold(
+        (failure) =>
+            emit(state.copyWith(errors: failure, homeStatus: HomeStatus.error)),
+        (articles) {
+      List<Articles> newArticles = state.articles ?? [];
+      newArticles.addAll(articles.articles ?? []);
+      int newPageNumber = state.pageNumber + 1;
+      emit(state.copyWith(
+          homeStatus: HomeStatus.getArticlesLoaded,
+          articles: newArticles,
+          isInSearchResult: true,
+          pageNumber: newPageNumber));
+    });
   }
 }

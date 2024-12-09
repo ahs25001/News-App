@@ -24,19 +24,22 @@ class HomeDsImpl implements HomeDs {
 
   @override
   Future<Either<Errors, ArticlesModel>> getArticles(String sourceId,
-      {required bool? isSearch, String? query}) async {
+      {required bool? isSearch, String? query, required int pageNumber}) async {
     try {
       ApiManager apiManager = ApiManager.instance;
       String link;
       if (isSearch ?? false) {
         link =
-            "$baseUrl$getArticlesEndPoint?apiKey=$apiKey&sources=$sourceId&q=$query";
+            "$baseUrl$getArticlesEndPoint?apiKey=$apiKey&sources=$sourceId&q=$query&pageSize=10&page=$pageNumber";
       } else {
-        link = "$baseUrl$getArticlesEndPoint?apiKey=$apiKey&sources=$sourceId";
+        link =
+            "$baseUrl$getArticlesEndPoint?apiKey=$apiKey&sources=$sourceId&pageSize=10&page=$pageNumber";
       }
       var response = await apiManager.getData(link);
+      print(response);
       return Right(ArticlesModel.fromJson(response));
     } catch (e) {
+      print(e.toString());
       return Left(RemoteError(e.toString()));
     }
   }

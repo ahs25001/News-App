@@ -175,6 +175,57 @@ class SettingsScreen extends StatelessWidget {
                     DropdownMenuEntry(value: "en", label: 'English'),
                     DropdownMenuEntry(value: "ar", label: 'Arabic'),
                   ]),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Divider(
+              color: Theme.of(context).colorScheme.primary,
+              endIndent: 20.w,
+              indent: 20.w,
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18.0.w),
+              child: Text(
+                "API Key",
+                style: optionsTitleStyle,
+              ),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Center(
+              child: DropdownMenu(
+                  inputDecorationTheme: InputDecorationTheme(
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                          borderRadius: BorderRadius.circular(20.r)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                          borderRadius: BorderRadius.circular(20.r)),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                          borderRadius: BorderRadius.circular(20.r))),
+                  initialSelection: "1a86229d4d5e448787eaa74230eb8462",
+                  onSelected: (value) => apiKey = value ?? "",
+                  menuStyle: MenuStyle(
+                      surfaceTintColor: WidgetStatePropertyAll(
+                          Theme.of(context).colorScheme.primary)),
+                  width: MediaQuery.sizeOf(context).width * .9,
+                  dropdownMenuEntries: const [
+                    DropdownMenuEntry(
+                        value: "1a86229d4d5e448787eaa74230eb8462",
+                        label: 'First'),
+                    DropdownMenuEntry(
+                        value: "4f4e24c0a1714df5814e98e57fc3ab2d",
+                        label: 'Second'),
+                  ]),
             )
           ],
         ),

@@ -9,5 +9,5 @@ abstract class HomeDs {
       String categoryId, String language);
 
   Future<Either<Errors, ArticlesModel>> getArticles(String sourceId,
-      {required bool? isSearch, String? query});
+      {required bool? isSearch, String? query,required int pageNumber});
 }

@@ -7,5 +7,5 @@ import '../../data/models/SourceModel.dart';
 abstract class HomeRepo {
   Future<Either<Errors, SourceModel>> getSources(
       String categoryId, String language);
-  Future<Either<Errors, ArticlesModel>> getArticles(String sourceId,{required bool? isSearch, String? query});
+  Future<Either<Errors, ArticlesModel>> getArticles(String sourceId,{required bool? isSearch, String? query,required int pageNumber});
 }

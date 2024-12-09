@@ -4,3 +4,4 @@ String settings = "Settings";
 String themes = "Themes";
 String autoThemes = "Auto themes";
 String language = "Language";
+String hintSearch = "Search for news...";

@@ -120,7 +120,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             body: BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
-                return ((state.sources == null || state.sources!.isEmpty) &&
+                return (state.homeStatus == HomeStatus.error)?Center(child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Lottie.asset(error),
+                    Text("Time out Error",style: selectMassageStyle,)
+                  ],
+                )):((state.sources == null || state.sources!.isEmpty) &&
                         state.homeStatus == HomeStatus.getSourcesLoaded)
                     ? Center(child: Lottie.asset(notFound))
                     : (state.homeStatus == HomeStatus.getSourcesLoading)

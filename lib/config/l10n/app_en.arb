@@ -1,0 +1,24 @@
+{
+  "appName": "News App",
+  "selectMassage": "Pick your category of interest",
+  "settings": "Settings",
+  "themes": "Themes",
+  "autoThemes": "Auto themes",
+  "language": "Language",
+  "hintSearch": "Search for news...",
+  "categoryName": "{category, select, general{General} sports{Sports} health{Health} business{Business} science{Science} entertainment{Environment} other{error}}",
+  "@categoryName": {
+    "description": "A selected category",
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "english": "English",
+  "arabic": "Arabic",
+  "first": "First",
+  "second": "Second",
+  "viewInBrowser": "View in browser",
+  "tryAgain": "Try again"
+}

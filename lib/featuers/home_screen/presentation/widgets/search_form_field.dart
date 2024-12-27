@@ -3,10 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/core/utils/app_styles.dart';
 
 import '../../../../config/themes/themes.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_strings.dart';
+import '../../../settings_screen/presentation/cubit/settings_cubit.dart';
 import '../cubit/home_cubit.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SearchFormField extends StatelessWidget {
   BuildContext context;
 
@@ -16,7 +15,7 @@ class SearchFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: HomeCubit.get(this.context).searchController,
-      cursorColor: lightTheme.colorScheme.primary,
+      cursorColor: Theme.of(context).colorScheme.primary,
       cursorOpacityAnimates: true,
       autofocus: true,
       onFieldSubmitted: (value) {
@@ -24,20 +23,20 @@ class SearchFormField extends StatelessWidget {
             HomeCubit.get(this.context)
                 .state.sources?[0]
                 .id ??
-                "");
+                "",SettingsCubit.get(context).state.language);
       },
       textInputAction: TextInputAction.search,
       style: articleTitleStyle,
       decoration: InputDecoration(
-        hintText: hintSearch,
-          hintStyle: unselectedLabelStyle.copyWith(color:lightTheme.colorScheme.primary),
+        hintText: AppLocalizations.of(context)!.hintSearch,
+          hintStyle: unselectedLabelStyle.copyWith(color:Theme.of(context).colorScheme.primary),
           prefixIcon: InkWell(
               onTap: () {
                 HomeCubit.get(this.context).cancelSearch();
               },
               child: Icon(
                 Icons.close,
-                color: lightTheme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
                 size: 25.sp,
               )),
           fillColor: Colors.white,
@@ -45,15 +44,15 @@ class SearchFormField extends StatelessWidget {
           contentPadding:
           EdgeInsets.symmetric(vertical: 13.h),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: lightTheme.colorScheme.primary),
+            borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
             borderRadius: BorderRadius.circular(35.r),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: lightTheme.colorScheme.primary),
+            borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
             borderRadius: BorderRadius.circular(35.r),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: lightTheme.colorScheme.primary),
+            borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
             borderRadius: BorderRadius.circular(35.r),
           )),
     );

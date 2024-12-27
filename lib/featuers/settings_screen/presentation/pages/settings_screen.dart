@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:news_app/config/themes/themes.dart';
 import 'package:news_app/core/utils/app_constants.dart';
-import 'package:news_app/core/utils/app_strings.dart';
-
-import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_styles.dart';
 import '../cubit/settings_cubit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -25,7 +22,7 @@ class SettingsScreen extends StatelessWidget {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(settings),
+          title: Text(AppLocalizations.of(context)!.settings),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 18.0.w),
               child: Text(
-                themes,
+                AppLocalizations.of(context)!.themes,
                 style: optionsTitleStyle,
               ),
             ),
@@ -44,7 +41,7 @@ class SettingsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  autoThemes,
+                  AppLocalizations.of(context)!.autoThemes,
                   style: optionsStyle.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -144,7 +141,7 @@ class SettingsScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 18.0.w),
               child: Text(
-                language,
+                AppLocalizations.of(context)!.language,
                 style: optionsTitleStyle,
               ),
             ),
@@ -166,14 +163,21 @@ class SettingsScreen extends StatelessWidget {
                           borderSide: BorderSide(
                               color: Theme.of(context).colorScheme.primary),
                           borderRadius: BorderRadius.circular(20.r))),
-                  initialSelection: "en",
+                  initialSelection: SettingsCubit.get(context).state.language,
+                  onSelected: (value) {
+                    SettingsCubit.get(context).changeLanguage(value);
+                  },
                   menuStyle: MenuStyle(
                       surfaceTintColor: WidgetStatePropertyAll(
                           Theme.of(context).colorScheme.primary)),
                   width: MediaQuery.sizeOf(context).width * .9,
-                  dropdownMenuEntries: const [
-                    DropdownMenuEntry(value: "en", label: 'English'),
-                    DropdownMenuEntry(value: "ar", label: 'Arabic'),
+                  dropdownMenuEntries: [
+                    DropdownMenuEntry(
+                        value: "en",
+                        label: AppLocalizations.of(context)!.english),
+                    DropdownMenuEntry(
+                        value: "ar",
+                        label: AppLocalizations.of(context)!.arabic),
                   ]),
             ),
             SizedBox(
@@ -218,13 +222,13 @@ class SettingsScreen extends StatelessWidget {
                       surfaceTintColor: WidgetStatePropertyAll(
                           Theme.of(context).colorScheme.primary)),
                   width: MediaQuery.sizeOf(context).width * .9,
-                  dropdownMenuEntries: const [
+                  dropdownMenuEntries:  [
                     DropdownMenuEntry(
                         value: "1a86229d4d5e448787eaa74230eb8462",
-                        label: 'First'),
+                        label: AppLocalizations.of(context)!.first),
                     DropdownMenuEntry(
                         value: "4f4e24c0a1714df5814e98e57fc3ab2d",
-                        label: 'Second'),
+                        label:  AppLocalizations.of(context)!.second),
                   ]),
             )
           ],

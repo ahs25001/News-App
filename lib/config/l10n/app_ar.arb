@@ -1,0 +1,24 @@
+{
+  "appName": "نيوز اب",
+  "selectMassage": "اختر الفئة التي تهتم بها",
+  "settings": "الاعدادات",
+  "themes": "السمات",
+  "autoThemes": "السيم التلقائي",
+  "language": "اللغه",
+  "hintSearch": "ابحث عن الاخبار ...",
+  "categoryName": "{category, select, general{عام} sports{الرياضه} health{الصحة} business{الاعمال} science{العلوم} entertainment{البيئة} other{خطأ}}",
+  "@categoryName": {
+    "description": "A selected category",
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "english": "الانجليزية",
+  "arabic": "العربية",
+  "first": "الاول",
+  "second": "الثاني",
+  "viewInBrowser": "عرض في المتصفح",
+  "tryAgain": "حاول مرة أخرى"
+}

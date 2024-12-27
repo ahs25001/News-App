@@ -7,7 +7,7 @@ import '../../../../core/utils/app_constants.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/app_styles.dart';
 import '../widgets/category_item.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectCategoryScreen extends StatelessWidget {
 
@@ -22,7 +22,7 @@ class SelectCategoryScreen extends StatelessWidget {
           leading: InkWell(
               onTap: () => Navigator.pushNamed(context, AppRoutes.settings),
               child: Icon(Icons.settings)),
-          title: Text(appName),
+          title: Text(AppLocalizations.of(context)!.appName),
         ),
         backgroundColor: Colors.transparent,
         body: Padding(
@@ -31,7 +31,7 @@ class SelectCategoryScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                selectMassage,
+                AppLocalizations.of(context)!.selectMassage,
                 style: selectMassageStyle,
               ),
               SizedBox(height: 29.h,),

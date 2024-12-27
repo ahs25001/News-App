@@ -12,7 +12,7 @@ import 'package:news_app/featuers/home_screen/presentation/widgets/sources_loadi
 import 'package:news_app/featuers/select_category/data/models/category_model.dart';
 import 'package:news_app/featuers/settings_screen/presentation/cubit/settings_cubit.dart';
 import 'package:shimmer/shimmer.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../core/utils/app_images.dart';
 import '../widgets/article_item.dart';
 
@@ -36,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
         if (scrollController.position.pixels != 0 &&
             homeCubit.state.homeStatus != HomeStatus.getArticlesLoading) {
           await homeCubit.getArticles(
-              homeCubit.state.sources?[homeCubit.state.index ?? 0].id ?? "");
+              homeCubit.state.sources?[homeCubit.state.index ?? 0].id ?? "",
+              SettingsCubit.get(context).state.language);
         }
       }
     });
@@ -59,7 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
               image: AssetImage(backgroundImage), fit: BoxFit.cover),
         ),
         child: BlocProvider(
-          create: (context) => homeCubit..getSources(args.id, "en"),
+          create: (context) => homeCubit
+            ..getSources(args.id, SettingsCubit.get(context).state.language),
           child: Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
@@ -74,7 +76,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     switchInCurve: Curves.easeInQuart,
                     switchOutCurve: Curves.easeInQuart,
                     transitionBuilder: (child, animation) => ScaleTransition(
-                      alignment: Alignment.centerRight,
+                      alignment:
+                          (SettingsCubit.get(context).state.language == "ar")
+                              ? Alignment.centerLeft
+                              : Alignment.centerRight,
                       scale: animation,
                       // sizeFactor: animation,
                       child: child,
@@ -87,7 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 textStyle: appBarTitleStyle,
                                 color: Colors.transparent,
                                 child: Text(
-                                  args.name,
+                                  AppLocalizations.of(context)!
+                                      .categoryName(args.id),
                                   textAlign: TextAlign.center,
                                 ))),
                   );
@@ -120,207 +126,294 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             body: BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
-                return (state.homeStatus == HomeStatus.error)?Center(child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Lottie.asset(error),
-                    Text("Time out Error",style: selectMassageStyle,)
-                  ],
-                )):((state.sources == null || state.sources!.isEmpty) &&
-                        state.homeStatus == HomeStatus.getSourcesLoaded)
-                    ? Center(child: Lottie.asset(notFound))
-                    : (state.homeStatus == HomeStatus.getSourcesLoading)
-                        ? Column(
-                            children: [
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              const SourcesLoading(),
-                              const ArticleLoading()
-                            ],
+                return (state.homeStatus == HomeStatus.error)
+                    ? Center(
+                        child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Lottie.asset(error),
+                          Text(
+                            "Time out Error",
+                            style: selectMassageStyle,
                           )
-                        : (state.homeStatus == HomeStatus.noInternet)
-                            ? Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Lottie.asset(noInternet),
-                                    ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                        onPressed: () {
-                                          HomeCubit.get(context)
-                                              .getSources(args.id, "en");
-                                        },
-                                        child: Text(
-                                          "Tray again",
-                                          style: appBarTitleStyle,
-                                        ))
-                                  ],
-                                ),
-                              )
-                            : Column(
+                        ],
+                      ))
+                    : ((state.sources == null || state.sources!.isEmpty) &&
+                            state.homeStatus == HomeStatus.getSourcesLoaded)
+                        ? Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Lottie.asset(notFound),
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                    onPressed: () {
+                                      HomeCubit.get(context).getSources(
+                                          args.id,
+                                          SettingsCubit.get(context)
+                                              .state
+                                              .language);
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)!.tryAgain,
+                                      style: appBarTitleStyle,
+                                    ))
+                              ],
+                            ),
+                          )
+                        : (state.homeStatus == HomeStatus.getSourcesLoading)
+                            ? Column(
                                 children: [
                                   SizedBox(
                                     height: 10.h,
                                   ),
-                                  DefaultTabController(
-                                      length: state.sources?.length ?? 0,
-                                      child: TabBar(
-                                          splashFactory: NoSplash.splashFactory,
-                                          onTap: (value) {
-                                            HomeCubit.get(context)
-                                                .changeSource(value);
-                                          },
-                                          dividerColor: Colors.transparent,
-                                          indicatorColor: Colors.transparent,
-                                          isScrollable: true,
-                                          tabs: (state.sources ?? [])
-                                              .map((e) => SourceItem(
-                                                    sourceId: e.id ?? "",
-                                                    sourceName: e.name!,
-                                                    isSelect: state.index ==
-                                                        (state.sources ?? [])
-                                                            .indexOf(e),
-                                                  ))
-                                              .toList())),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  (state.homeStatus ==
-                                              HomeStatus.getArticlesLoading &&
-                                          (state.articles == null ||
-                                              state.articles!.isEmpty))
-                                      ? const ArticleLoading()
-                                      : ((state.articles == null ||
-                                                  state.articles!.isEmpty) &&
-                                              state.homeStatus ==
-                                                  HomeStatus.getArticlesLoaded)
-                                          ? Center(
-                                              child: Lottie.asset(notFound))
-                                          : Expanded(
-                                              child: RefreshIndicator(
-                                                onRefresh: () async {
-                                                  HomeCubit.get(context)
-                                                      .getArticles(
-                                                          state
-                                                                  .sources?[
-                                                                      state.index ??
-                                                                          0]
-                                                                  .id ??
-                                                              "",
-                                                          refresh: true);
-                                                },
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                triggerMode:
-                                                    RefreshIndicatorTriggerMode
-                                                        .anywhere,
-                                                child: ListView.builder(
-                                                  controller: scrollController,
-                                                  itemCount: state.homeStatus ==
-                                                          HomeStatus
-                                                              .getArticlesLoading
-                                                      ? (state.articles
+                                  const SourcesLoading(),
+                                  const ArticleLoading()
+                                ],
+                              )
+                            : (state.homeStatus == HomeStatus.noInternet)
+                                ? Center(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Lottie.asset(noInternet),
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .primary),
+                                            onPressed: () {
+                                              HomeCubit.get(context).getSources(
+                                                  args.id,
+                                                  SettingsCubit.get(context)
+                                                      .state
+                                                      .language);
+                                            },
+                                            child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .tryAgain,
+                                              style: appBarTitleStyle,
+                                            ))
+                                      ],
+                                    ),
+                                  )
+                                : Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      DefaultTabController(
+                                          length: state.sources?.length ?? 0,
+                                          child: TabBar(
+                                              splashFactory:
+                                                  NoSplash.splashFactory,
+                                              onTap: (value) {
+                                                HomeCubit.get(context)
+                                                    .changeSource(
+                                                        value,
+                                                        SettingsCubit.get(
+                                                                context)
+                                                            .state
+                                                            .language);
+                                              },
+                                              dividerColor: Colors.transparent,
+                                              indicatorColor:
+                                                  Colors.transparent,
+                                              isScrollable: true,
+                                              tabs: (state.sources ?? [])
+                                                  .map((e) => SourceItem(
+                                                        sourceId: e.id ?? "",
+                                                        sourceName: e.name!,
+                                                        isSelect: state.index ==
+                                                            (state.sources ??
+                                                                    [])
+                                                                .indexOf(e),
+                                                      ))
+                                                  .toList())),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      (state.homeStatus ==
+                                                  HomeStatus
+                                                      .getArticlesLoading &&
+                                              (state.articles == null ||
+                                                  state.articles!.isEmpty))
+                                          ? const ArticleLoading()
+                                          : ((state.articles == null ||
+                                                      state
+                                                          .articles!.isEmpty) &&
+                                                  state.homeStatus ==
+                                                      HomeStatus
+                                                          .getArticlesLoaded)
+                                              ? Center(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Lottie.asset(notFound),
+                                                      ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(
+                                                              backgroundColor:
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .primary),
+                                                          onPressed: () {
+                                                            HomeCubit.get(
+                                                                    context)
+                                                                .getSources(
+                                                                    args.id,
+                                                                    SettingsCubit.get(
+                                                                            context)
+                                                                        .state
+                                                                        .language);
+                                                          },
+                                                          child: Text(
+                                                            AppLocalizations.of(
+                                                                    context)!
+                                                                .tryAgain,
+                                                            style:
+                                                                appBarTitleStyle,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                )
+                                              : Expanded(
+                                                  child: RefreshIndicator(
+                                                    onRefresh: () async {
+                                                      HomeCubit.get(context)
+                                                          .getArticles(
+                                                              state
+                                                                      .sources?[
+                                                                          state.index ??
+                                                                              0]
+                                                                      .id ??
+                                                                  "",
+                                                              SettingsCubit.get(
+                                                                      context)
+                                                                  .state
+                                                                  .language,
+                                                              refresh: true);
+                                                    },
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    triggerMode:
+                                                        RefreshIndicatorTriggerMode
+                                                            .anywhere,
+                                                    child: ListView.builder(
+                                                      controller:
+                                                          scrollController,
+                                                      itemCount: state
+                                                                  .homeStatus ==
+                                                              HomeStatus
+                                                                  .getArticlesLoading
+                                                          ? (state.articles
+                                                                      ?.length ??
+                                                                  0) +
+                                                              1
+                                                          : (state.articles
                                                                   ?.length ??
-                                                              0) +
-                                                          1
-                                                      : (state.articles
-                                                              ?.length ??
-                                                          0),
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    if (index ==
-                                                        (state.articles
-                                                                ?.length ??
-                                                            0)) {
-                                                      return Shimmer.fromColors(
-                                                        baseColor: Colors
-                                                            .grey.shade300,
-                                                        highlightColor: Colors
-                                                            .grey.shade100,
-                                                        child: Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      10.w,
-                                                                  vertical:
-                                                                      10.h),
-                                                          margin: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      20.w,
-                                                                  vertical:
-                                                                      15.h),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                                  // color: Colors.white,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(25
+                                                              0),
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        if (index ==
+                                                            (state.articles
+                                                                    ?.length ??
+                                                                0)) {
+                                                          return Shimmer
+                                                              .fromColors(
+                                                            baseColor: Colors
+                                                                .grey.shade300,
+                                                            highlightColor:
+                                                                Colors.grey
+                                                                    .shade100,
+                                                            child: Container(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          10.w,
+                                                                      vertical:
+                                                                          10.h),
+                                                              margin: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          20.w,
+                                                                      vertical:
+                                                                          15.h),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                      // color: Colors.white,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(25
                                                                               .r),
-                                                                  border: Border.all(
-                                                                      color: Theme.of(
-                                                                              context)
-                                                                          .primaryColor)),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Container(
-                                                                width: 360.w,
-                                                                height: 232.h,
-                                                                decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.vertical(
+                                                                      border: Border.all(
+                                                                          color:
+                                                                              Theme.of(context).primaryColor)),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Container(
+                                                                    width:
+                                                                        360.w,
+                                                                    height:
+                                                                        232.h,
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius: BorderRadius.vertical(
                                                                             top: Radius.circular(25
                                                                                 .r)),
-                                                                    color: Colors
-                                                                        .white),
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height:
+                                                                        15.h,
+                                                                  ),
+                                                                  Container(
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(25.r)),
+                                                                    width:
+                                                                        200.w,
+                                                                    height:
+                                                                        20.h,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height:
+                                                                        10.h,
+                                                                  ),
+                                                                  Container(
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(25.r)),
+                                                                    width:
+                                                                        700.w,
+                                                                    height:
+                                                                        20.h,
+                                                                  ),
+                                                                ],
                                                               ),
-                                                              SizedBox(
-                                                                height: 15.h,
-                                                              ),
-                                                              Container(
-                                                                decoration: BoxDecoration(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            25.r)),
-                                                                width: 200.w,
-                                                                height: 20.h,
-                                                              ),
-                                                              SizedBox(
-                                                                height: 10.h,
-                                                              ),
-                                                              Container(
-                                                                decoration: BoxDecoration(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            25.r)),
-                                                                width: 700.w,
-                                                                height: 20.h,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }
-                                                    return ArticleItem(
-                                                        state.articles?[index]);
-                                                  },
+                                                            ),
+                                                          );
+                                                        }
+                                                        return ArticleItem(state
+                                                            .articles?[index]);
+                                                      },
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                ],
-                              );
+                                    ],
+                                  );
               },
             ),
           ),

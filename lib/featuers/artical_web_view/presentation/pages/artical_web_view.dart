@@ -59,7 +59,7 @@ class _ArticleWebViewState extends State<ArticleWebView> {
         // backgroundColor: Colors.green,
         title: Text("News App"),
       ),
-      body: (loading)?Center(child: CircularProgressIndicator(color:lightTheme.colorScheme.primary,),):WebViewWidget(controller: controller),
+      body: (loading)?Center(child: CircularProgressIndicator(color:Theme.of(context).colorScheme.primary,),):WebViewWidget(controller: controller),
     );
   }
 }

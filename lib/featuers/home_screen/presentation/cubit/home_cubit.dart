@@ -52,24 +52,26 @@ class HomeCubit extends Cubit<HomeState> {
             homeStatus: HomeStatus.getSourcesLoaded,
             sources: sources.sources,
             index: 0));
-        await getArticles(sources.sources?[0].id ?? "");
+        if(sources.sources?.isNotEmpty ?? false){
+          await getArticles(sources.sources?[0].id ?? "",language);
+        }
       });
     }
   }
 
-  void changeSource(int index) async {
+  void changeSource(int index,String language) async {
     emit(state.copyWith(index: index, articles: []));
-    await getArticles(state.sources?[index].id ?? "");
+    await getArticles(state.sources?[index].id ?? "",language);
   }
 
-  Future<void> getArticles(String sourceId, {bool refresh = false}) async {
+  Future<void> getArticles(String sourceId,String language, {bool refresh = false}) async {
     emit(state.copyWith(
       pageNumber: refresh?1:null,
         homeStatus: HomeStatus.getArticlesLoading,
         articles: refresh ? [] : state.articles));
 
     HomeRepo homeRepo = HomeRepoImpl(HomeDsImpl());
-    final failureOrArticles = await homeRepo.getArticles(sourceId,
+    final failureOrArticles = await homeRepo.getArticles(sourceId,language,
         isSearch: state.isInSearch,
         query: searchController.text,
         pageNumber: state.pageNumber);
@@ -87,12 +89,12 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  Future<void> getSearchResultArticles(String sourceId) async {
+  Future<void> getSearchResultArticles(String sourceId,String language) async {
     emit(state
         .copyWith(homeStatus: HomeStatus.getArticlesLoading, articles: []));
 
     HomeRepo homeRepo = HomeRepoImpl(HomeDsImpl());
-    final failureOrArticles = await homeRepo.getArticles(sourceId,
+    final failureOrArticles = await homeRepo.getArticles(sourceId,language,
         isSearch: state.isInSearch,
         query: searchController.text,
         pageNumber: state.pageNumber);

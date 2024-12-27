@@ -6,6 +6,7 @@ import 'package:news_app/core/utils/app_constants.dart';
 import 'package:news_app/featuers/settings_screen/presentation/cubit/settings_cubit.dart';
 import '../../../../core/utils/app_styles.dart';
 import '../../data/models/category_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CategoryItem extends StatelessWidget {
   CategoryModel categoryModel;
@@ -17,8 +18,9 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if(SettingsCubit.get(context).state.isAutoTheme) {
-          SettingsCubit.get(context).changePrimaryColor(colors.indexOf(categoryModel.color));
+        if (SettingsCubit.get(context).state.isAutoTheme) {
+          SettingsCubit.get(context)
+              .changePrimaryColor(colors.indexOf(categoryModel.color));
         }
         Navigator.pushNamed(context, AppRoutes.home, arguments: categoryModel);
       },
@@ -33,10 +35,19 @@ class CategoryItem extends StatelessWidget {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25.r),
                   topRight: Radius.circular(25.r),
-                  bottomRight:
-                      index % 2 != 0 ? Radius.circular(25.r) : Radius.zero,
-                  bottomLeft:
-                      index % 2 != 0 ? Radius.zero : Radius.circular(25.r))),
+                  bottomRight: (SettingsCubit.get(context).state.language ==
+                          "ar")
+                      ? (index % 2 == 0 ? Radius.circular(25.r) : Radius.zero)
+                      : index % 2 != 0
+                          ? Radius.circular(25.r)
+                          : Radius.zero,
+                  bottomLeft: (SettingsCubit.get(context).state.language ==
+                          "ar")
+                      ? (index % 2 == 0 ? Radius.zero : Radius.circular(25.r))
+                      : index % 2 != 0 &&
+                              SettingsCubit.get(context).state.language == "en"
+                          ? Radius.zero
+                          : Radius.circular(25.r))),
           child: Column(
             children: [
               Hero(
@@ -51,7 +62,7 @@ class CategoryItem extends StatelessWidget {
                 height: 25.h,
               ),
               Text(
-                categoryModel.name,
+                AppLocalizations.of(context)!.categoryName(categoryModel.id),
                 style: categoryTitleStyle,
               ),
             ],

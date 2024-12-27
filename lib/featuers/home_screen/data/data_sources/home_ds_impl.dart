@@ -23,7 +23,7 @@ class HomeDsImpl implements HomeDs {
   }
 
   @override
-  Future<Either<Errors, ArticlesModel>> getArticles(String sourceId,
+  Future<Either<Errors, ArticlesModel>> getArticles(String sourceId,String language,
       {required bool? isSearch, String? query, required int pageNumber}) async {
     try {
       ApiManager apiManager = ApiManager.instance;

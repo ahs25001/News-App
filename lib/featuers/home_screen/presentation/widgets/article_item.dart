@@ -3,10 +3,9 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/config/routes/routes.dart';
-import 'package:news_app/core/utils/app_colors.dart';
 import 'package:news_app/featuers/home_screen/data/models/ArticlesModel.dart';
 
-import '../../../../config/themes/themes.dart';
+import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_styles.dart';
 
 class ArticleItem extends StatelessWidget {
@@ -27,7 +26,7 @@ class ArticleItem extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(25.r),
-              border: Border.all(color: lightTheme.colorScheme.primary)),
+              border: Border.all(color: Theme.of(context).colorScheme.primary)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -40,7 +39,7 @@ class ArticleItem extends StatelessWidget {
                     imageUrl: '${articles?.urlToImage}',
                     width: 360.w,
                     height: 232.h,
-                    errorWidget: Icon(Icons.error),
+                    errorWidget: Image.asset(newsImage),
                   ),
                 ),
               ),

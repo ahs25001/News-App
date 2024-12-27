@@ -9,7 +9,10 @@ class SourceItem extends StatelessWidget {
   bool isSelect;
   String sourceId;
 
-  SourceItem({required this.sourceName, required this.isSelect,required this.sourceId});
+  SourceItem(
+      {required this.sourceName,
+      required this.isSelect,
+      required this.sourceId});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +23,18 @@ class SourceItem extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           decoration: BoxDecoration(
-            border: Border.all(color: lightTheme.colorScheme.primary),
-              color: isSelect ? lightTheme.colorScheme.primary : Colors.transparent,
+              border: Border.all(color: Theme.of(context).colorScheme.primary),
+              color: isSelect
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(25.r)),
-          child: Text(sourceName,style: isSelect?selectedLabelStyle:unselectedLabelStyle.copyWith(color:lightTheme.colorScheme.primary),),
+          child: Text(
+            sourceName,
+            style: isSelect
+                ? selectedLabelStyle
+                : unselectedLabelStyle.copyWith(
+                    color: Theme.of(context).colorScheme.primary),
+          ),
         ),
       ),
     );

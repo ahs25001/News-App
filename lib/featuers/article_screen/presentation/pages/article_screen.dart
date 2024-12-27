@@ -7,7 +7,7 @@ import '../../../../config/themes/themes.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_styles.dart';
 import '../../../home_screen/data/models/ArticlesModel.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ArticleScreen extends StatelessWidget {
   const ArticleScreen({super.key});
 
@@ -43,7 +43,7 @@ class ArticleScreen extends StatelessWidget {
                 imageUrl: '${args.urlToImage}',
                 width: double.infinity,
                 height: 232.h,
-                errorWidget: Icon(Icons.error),
+                  errorWidget: Image.asset(newsImage),
               ),
             ),
             SizedBox(
@@ -59,7 +59,7 @@ class ArticleScreen extends StatelessWidget {
                         tag:
                             "${args.url}${args.title}${args.author}${args.author}",
                         child: Material(
-                          textStyle:articleDateStyle ,
+                            textStyle: articleDateStyle,
                             color: Colors.transparent,
                             child: Text(
                               args.author ?? "",
@@ -67,7 +67,8 @@ class ArticleScreen extends StatelessWidget {
                             ))),
                   ),
                   SizedBox(
-                    height: 15.h,),
+                    height: 15.h,
+                  ),
                   Text(
                     args.title ?? "",
                     style: articleTitleStyle,
@@ -110,8 +111,9 @@ class ArticleScreen extends StatelessWidget {
                             ));
                       },
                       child: Text(
-                        "view in browser",
-                        style: viewInBrowserStyle.copyWith(color:lightTheme.colorScheme.primary),
+                        AppLocalizations.of(context)!.viewInBrowser,
+                        style: viewInBrowserStyle.copyWith(
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                     )
                   ],
